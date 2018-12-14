@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ZX Test - Home Page</title>
+</head>
+
+<body>
+  <header class='header'>
+    <nav class='header__nav'>
+      <img class='header__nav-img' src="./src/img/white-logo-horizontal.png" alt="logo da zé delivery e bebidas">
+       <div class='header__address'>
+         <img src='./src/img/location-icon.png' alt='location-icon'>
+         <div class='header__address-user'>
+           <span class='header__address-user-title'>ENDEREÇO DE ENTREGA</span>
+           <span class='header__address-user-input'id='user-address'></span>
+         </div>
+       </div>
+      <button class='header__nav-btn'>ENTRAR</button>
+    </nav>
+  </header>
+
+  <main id='home' class='main'>
+    <div class='main__search'>
+      <h1>Bebida gelada, rápida a preço baixo</h1>
+      <p>Pra curtir a qualquer momento</p>
+
+      <button id='btnFocus' class='main__btn-right'>ENTREGA</button><button class='main__btn-left'>RETIRADA</button>
+      <label for='address'>ENDEREÇO DE ENTREGA</label>
+      <div class='main__search-box'>
+        <input id='inputSearch' class='main__search-input' name='address' type='text' placeholder="Ex. Av Paulista 228">
+        <button id='btnSearch' class='main__search-btn'>VER PRODUTOS</button>
+      </div>
+    </div>
+    <img class='main__img' src="./src/img/Cervezas.jpg" alt="foto de 3 cervejas de 600ml">
+  </main>
+  <section id='products'>
+
+    <select>
+      <option value='0'>Todos</option>
+      <option value='0'>Cervejas</option>
+      <option value='0'>Destilados</option>
+      <option value='0'>Vinhos</option>
+      <option value='0'>Sem álcool</option>
+      <option value='0'>Petiscos</option>
+      <option value='0'>Outros</option>
+    </select>
+
+    <input class='products__input-search' type='text' placeholder="Buscar"><img class='products__input-search-icon' src='./src/img/search_icon.png'>
+
+    <section id='listOfProducts' class='products__list'>
+
+    </section>
+
+  </section>
+  <footer class='footer' id='footerHome'>
+    <ul>
+      <li class='footer__list-title'>Zé Delivery</li>
+      <li>Me contrata</li>
+      <li>Sou legal</li>
+      <li>Vocês também</li>
+      <li>Deu match! </li>
+    </ul>
+    <p class='footer__text'> code by &copy; Natalya Peixoto</p>
+  </footer>
+
+  <footer id='cart'>
+    <div class='cart__content'>
+      <span>R$</span>
+      <p id='total'>0,00</p>
+      <div class='cart__button-box'>
+        <img class='cart__icon' src='./src/img/cart_icon.png' alt='icone de um carrinho de compras'><button>FECHA A
+          CONTA, ZÉ</button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./dist/bundle.js"></script>
+</body>
+
+</html>
