@@ -113,14 +113,16 @@ fetch('https://803votn6w7.execute-api.us-west-2.amazonaws.com/dev/public/graphql
    const pocSearch = data.data.pocSearch
    const id = pocSearch[0].id
    console.log(data.data.pocSearch)
-   const categoryId = ''
-   const search = ''
+   const categoryId =''
+   const search =''
+   
    return getAllProducts(id, categoryId, search)
  })
 }
 
 
 function getAllProducts(id, categoryId, search ){
+  loading()
 const query = `query pocCategorySearch($id: ID!, $search: String!, $categoryId: Int!) {
   poc(id: $id) {
     products(categoryId: $categoryId, search: $search) {
@@ -149,13 +151,12 @@ const query = `query pocCategorySearch($id: ID!, $search: String!, $categoryId: 
   })
 }).then(res => res.json())
 .then(function(data){
+  console.log(data)
   const listProducts = data.data.poc.products
   console.log(listProducts)
   renderHTML(listProducts, id)
  })
 }
-
-
 
 
 function getCategoryList(identification){
@@ -185,6 +186,7 @@ function getCategoryList(identification){
       const select = document.getElementById('select')
       const option = document.createElement('option')
       option.value = categoryList[category].id
+      option.setAttribute('data-id', id)
       option.textContent = categoryList[category].title
       select.appendChild(option)
       }
@@ -218,10 +220,14 @@ function getCategoryList(identification){
     localStorage.setItem(`subtotal${idStorage}`, item );
     const storageTab = {...localStorage}
     let superTotal = [];
+    delete storageTab['loglevel:webpack-dev-server']
     for(const item in storageTab){
-       superTotal.push(parseFloat(storageTab[item])) 
-       let soma = superTotal.reduce((total, newValue)=> total + newValue,0)
+      console.log(item)
+       superTotal.push(parseFloat(storageTab[item]))
+       console.log(superTotal)
+       let soma = superTotal.reduce((total, newValue)=> total + newValue, 0)
         soma = Math.abs(soma)
+        console.log(soma)
        totalValue.innerHTML = soma.toFixed(2).replace('.', ',')
       }   
     idStorage++
@@ -230,6 +236,12 @@ function getCategoryList(identification){
 
   function renderHTML (listProducts, id){
     getCategoryList(id)
+    console.log(listProducts.length)
+    const productsBox = document.getElementById('listOfProducts')
+    productsBox.textContent =  ''
+    if(listProducts.length == 0){
+      renderNoResultsFound()
+    }
     for(const item of listProducts){
       console.log(item)
       const productsBox = document.getElementById('listOfProducts')
@@ -266,6 +278,22 @@ function getCategoryList(identification){
 
   const select = document.getElementById('select')
 
-  const nodes = select.childNodes
+ select.addEventListener('change', function(e){
+   const selectedCategory = select.options[select.selectedIndex].value
+   const id = !select.options[select.selectedIndex].getAttribute('data-id') ? select.options[select.selectedIndex+1].getAttribute('data-id'):select.options[select.selectedIndex].getAttribute('data-id')
+   console.log(JSON.parse(id))
+   const search = ''
+   getAllProducts(JSON.parse(id), selectedCategory,search)
+ })
  
- 
+ function renderNoResultsFound(){
+   console.log("oi")
+  const productsBox = document.getElementById('listOfProducts')
+  const msg = document.createElement('h2')
+  msg.textContent = 'Nenhum resultado encontrado'
+  productsBox.appendChild(msg)
+}
+function loading(){
+  const productsBox = document.getElementById('listOfProducts')
+  productsBox.textContent='loading...'
+}
