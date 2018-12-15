@@ -40,7 +40,7 @@ function getGeolocation(){
   .then(function(data){
     const lat = data.Response.View[0].Result[0].Location.DisplayPosition.Latitude
     const long =  data.Response.View[0].Result[0].Location.DisplayPosition.Longitude    
-    getServicesNear(lat, long)
+   return getServicesNear(lat, long)
   })
 }
  
@@ -113,10 +113,9 @@ fetch('https://803votn6w7.execute-api.us-west-2.amazonaws.com/dev/public/graphql
    const pocSearch = data.data.pocSearch
    const id = pocSearch[0].id
    console.log(data.data.pocSearch)
-
    const categoryId = ''
    const search = ''
-   getAllProducts(id, categoryId, search)
+   return getAllProducts(id, categoryId, search)
  })
 }
 
@@ -151,12 +150,13 @@ const query = `query pocCategorySearch($id: ID!, $search: String!, $categoryId: 
 }).then(res => res.json())
 .then(function(data){
   const listProducts = data.data.poc.products
-  renderHTML(listProducts)
+  console.log(listProducts)
+  renderHTML(listProducts, id)
  })
 }
 
-const select = document.querySelector('select')
-select.addEventListener('focus', getCategoryList)
+
+
 
 function getCategoryList(identification){
   const query = `query allCategoriesSearch {
@@ -179,10 +179,18 @@ function getCategoryList(identification){
     })
   }).then(res => res.json())
     .then(function(data){
-    console.log(data.data.allCategory)
-    getAllProducts(id, id)
+    console.log('data da category list', data)
+    const categoryList = data.data.allCategory
+      for (const category in categoryList){
+      const select = document.getElementById('select')
+      const option = document.createElement('option')
+      option.value = categoryList[category].id
+      option.textContent = categoryList[category].title
+      select.appendChild(option)
+      }
    })
   }
+
 
   function addOne(e){
     const gettingPrice = e.path[2]
@@ -196,8 +204,8 @@ function getCategoryList(identification){
   function removeOne(e){
       const gettingPrice = e.path[2]
       const price = gettingPrice.querySelector('p').innerHTML
-      const path = e.path[1]
-      const input = path.querySelector('input')
+      const gettingInput = e.path[1]
+      const input = gettingInput.querySelector('input')
       if(input.value == 0 || input.value === ''){return false}
       input.value--
       handleCart(price*-1)
@@ -220,7 +228,8 @@ function getCategoryList(identification){
   }
 
 
-  function renderHTML (listProducts){
+  function renderHTML (listProducts, id){
+    getCategoryList(id)
     for(const item of listProducts){
       console.log(item)
       const productsBox = document.getElementById('listOfProducts')
@@ -252,4 +261,11 @@ function getCategoryList(identification){
       div.appendChild(btnBox)
       productsBox.appendChild(div)
     }
+    
   }
+
+  const select = document.getElementById('select')
+
+  const nodes = select.childNodes
+ 
+ 
