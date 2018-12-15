@@ -6,6 +6,10 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
+  },
+  devServer:{
+      open:true,
+      writeToDisk:true
   }, 
   module: {
     rules: [{
