@@ -1,6 +1,7 @@
 import './main.scss'
 
 
+
 const btnFocus = document.getElementById('btnFocus')
 window.onload = btnFocus.focus()
 window.onload= localStorage.clear()
@@ -40,8 +41,8 @@ function getGeolocation(){
   .then(function(data){
     const lat = data.Response.View[0].Result[0].Location.DisplayPosition.Latitude
     const long =  data.Response.View[0].Result[0].Location.DisplayPosition.Longitude    
-   return getServicesNear(lat, long)
-  })
+    return getServicesNear(lat, long)
+  }).catch(error => console.log(error))
 }
  
 function getServicesNear(lat, long){
@@ -115,9 +116,8 @@ fetch('https://803votn6w7.execute-api.us-west-2.amazonaws.com/dev/public/graphql
    console.log(data.data.pocSearch)
    const categoryId =''
    const search =''
-   
    return getAllProducts(id, categoryId, search)
- })
+ }).catch(error => console.log(error))
 }
 
 
@@ -155,7 +155,7 @@ const query = `query pocCategorySearch($id: ID!, $search: String!, $categoryId: 
   const listProducts = data.data.poc.products
   console.log(listProducts)
   renderHTML(listProducts, id)
- })
+ }).catch(error => console.log(error))
 }
 
 
@@ -183,14 +183,16 @@ function getCategoryList(identification){
     console.log('data da category list', data)
     const categoryList = data.data.allCategory
       for (const category in categoryList){
-      const select = document.getElementById('select')
+      const searchInput = document.getElementById('categorySearch')  
+      const select = document.getElementById('categoryList')
       const option = document.createElement('option')
       option.value = categoryList[category].id
       option.setAttribute('data-id', id)
+      searchInput.setAttribute('data-id', id)
       option.textContent = categoryList[category].title
       select.appendChild(option)
       }
-   })
+   }).catch(error => console.log(error))
   }
 
 
@@ -235,7 +237,10 @@ function getCategoryList(identification){
 
 
   function renderHTML (listProducts, id){
-    getCategoryList(id)
+    const select = document.getElementById('categoryList')
+    if(select.childNodes.length < 4){
+       getCategoryList(id)
+    }
     console.log(listProducts.length)
     const productsBox = document.getElementById('listOfProducts')
     productsBox.textContent =  ''
@@ -273,21 +278,31 @@ function getCategoryList(identification){
       div.appendChild(btnBox)
       productsBox.appendChild(div)
     }
-    
   }
 
-  const select = document.getElementById('select')
-
+const select = document.getElementById('categoryList')
  select.addEventListener('change', function(e){
    const selectedCategory = select.options[select.selectedIndex].value
    const id = !select.options[select.selectedIndex].getAttribute('data-id') ? select.options[select.selectedIndex+1].getAttribute('data-id'):select.options[select.selectedIndex].getAttribute('data-id')
    console.log(JSON.parse(id))
    const search = ''
+   const categoryTitle = document.getElementById('categoryTitle')
+   categoryTitle.textContent = select.options[select.selectedIndex].textContent
    getAllProducts(JSON.parse(id), selectedCategory,search)
+ })
+
+ const searchInput = document.getElementById('categorySearch')
+ searchInput.addEventListener('blur', function(e){
+   const search = searchInput.value
+   const id = searchInput.getAttribute('data-id')
+   const categoryId = 0
+   const categoryTitle = document.getElementById('categoryTitle')
+   categoryTitle.textContent =  search
+   getAllProducts(JSON.parse(id), categoryId, search)
+   searchInput.value = ''
  })
  
  function renderNoResultsFound(){
-   console.log("oi")
   const productsBox = document.getElementById('listOfProducts')
   const msg = document.createElement('h2')
   msg.textContent = 'Nenhum resultado encontrado'
@@ -297,3 +312,39 @@ function loading(){
   const productsBox = document.getElementById('listOfProducts')
   productsBox.textContent='loading...'
 }
+
+const openModal = document.getElementById('openModal')
+openModal.addEventListener('click', displayModal)
+
+function displayModal(){
+  const modal = document.getElementById('modal')
+  modal.style.display = 'block'
+}
+
+
+const modalYesbtn =  document.getElementById('yes-btn')
+
+
+
+modalYesbtn.addEventListener('click', function(e){
+  const modal = document.getElementById('modal')
+  modal.style.display = 'none'
+  const home = document.getElementById('home')
+  home.style.display = 'flex'
+  const footerHome = document.getElementById('footerHome')
+  footerHome.style.display = 'block'
+  const products = document.getElementById('products')
+  products.style.display = 'none'
+  const cart = document.getElementById('cart')
+  cart.style.display ='none'
+  cart.style.position='fixed'
+  const addressBox = document.querySelector('.header__address')
+  addressBox.style.display = 'none'
+  localStorage.clear()
+})
+
+const modalNobtn = document.getElementById('no-btn')
+modalNobtn.addEventListener('click', function(e){
+  const modal = document.getElementById('modal')
+  modal.style.display = 'none'
+})

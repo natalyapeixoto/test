@@ -13,7 +13,7 @@
   <header class='header'>
     <nav class='header__nav'>
       <img class='header__nav-img' src="./src/img/white-logo-horizontal.png" alt="logo da zé delivery e bebidas">
-       <div class='header__address'>
+       <div id='openModal' class='header__address'>
          <img src='./src/img/location-icon.png' alt='location-icon'>
          <div class='header__address-user'>
            <span class='header__address-user-title'>ENDEREÇO DE ENTREGA</span>
@@ -38,18 +38,32 @@
     </div>
     <img class='main__img' src="./src/img/Cervezas.jpg" alt="foto de 3 cervejas de 600ml">
   </main>
+
+  <div id='modal' class='modal__container'>
+    <div class='modal__content'>
+      <div class="modal__img">
+        <img src='./src/img/modal-icon.png' alt='pin icon'>
+      </div
+      ><div class="body">
+         <p><strong>Tem certeza de que quer mudar o seu endereço?</strong></p><p class="note"><em>Ao mudar de endereço, você terá que refazer o seu pedido</em></p>
+        </div>
+        <div class="button-wrapper">
+          <button id='yes-btn' class='modal__btn'>Sim</button>
+          <button id='no-btn' class='modal__btn'>Não</div>
+        </div>
+      </div>
+    </div>
   <section id='products'>
 
-    <select id='select'>
+    <select id='categoryList'>
       <option value='0' selected>Todos</option>
-      
     </select>
 
-    <input class='products__input-search' type='text' placeholder="Buscar"><img class='products__input-search-icon' src='./src/img/search_icon.png'>
+    <input id='categorySearch' class='products__input-search' type='text' placeholder="Buscar"><img class='products__input-search-icon' src='./src/img/search_icon.png'>
+    <h3 id='categoryTitle' class='products__category-title'></h3>
 
-    <section id='listOfProducts' class='products__list'>
-
-    </section>
+    <div id='listOfProducts' class='products__list'>
+    </div>
 
   </section>
   <footer class='footer' id='footerHome'>
