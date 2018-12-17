@@ -1,24 +1,14 @@
 import './main.scss'
 
-
-
 const btnFocus = document.getElementById('btnFocus')
 window.onload = btnFocus.focus()
 window.onload= localStorage.clear()
 
 const searchBtn =  document.getElementById('btnSearch')
-searchBtn.addEventListener('click', changePage)
+searchBtn.addEventListener('click', goToProductPage)
 
 
-function putAddressOntheNavbar(){
-const addressBox = document.querySelector('.header__address')
-const userAddress = document.getElementById('user-address')
-const input = document.getElementById('inputSearch')
-addressBox.style.display = 'flex'
-userAddress.innerHTML = input.value
-}
-
-function changePage(){
+function goToProductPage(){
   const home = document.getElementById('home')
   home.style.display = 'none'
   const footerHome = document.getElementById('footerHome')
@@ -30,6 +20,14 @@ function changePage(){
   cart.style.position='fixed'
   putAddressOntheNavbar()
   getGeolocation()
+}
+
+function putAddressOntheNavbar(){
+  const addressBox = document.querySelector('.header__address')
+  const userAddress = document.getElementById('user-address')
+  const input = document.getElementById('inputSearch')
+  addressBox.style.display = 'flex'
+  userAddress.innerHTML = input.value
 }
 
 function getGeolocation(){
@@ -98,7 +96,6 @@ const query =  `query pocSearchMethod($now: DateTime!, $algorithm: String!, $lat
     }
   }
 }`
-
 fetch('https://803votn6w7.execute-api.us-west-2.amazonaws.com/dev/public/graphql',{
   method: 'POST', 
   headers: {
@@ -151,13 +148,10 @@ const query = `query pocCategorySearch($id: ID!, $search: String!, $categoryId: 
   })
 }).then(res => res.json())
 .then(function(data){
-  console.log(data)
   const listProducts = data.data.poc.products
-  console.log(listProducts)
-  renderHTML(listProducts, id)
+  renderListOfProfuctsFound(listProducts, id)
  }).catch(error => console.log(error))
 }
-
 
 function getCategoryList(identification){
   const query = `query allCategoriesSearch {
@@ -180,7 +174,6 @@ function getCategoryList(identification){
     })
   }).then(res => res.json())
     .then(function(data){
-    console.log('data da category list', data)
     const categoryList = data.data.allCategory
       for (const category in categoryList){
       const searchInput = document.getElementById('categorySearch')  
@@ -195,60 +188,22 @@ function getCategoryList(identification){
    }).catch(error => console.log(error))
   }
 
-
-  function addOne(e){
-    const gettingPrice = e.path[2]
-    const price = gettingPrice.querySelector('p').innerHTML
-    const path = e.path[1]
-    const input = path.querySelector('input')
-    input.value++
-    handleCart(price)
+  function loading(){
+    const productsBox = document.getElementById('listOfProducts')
+    productsBox.textContent='loading...'
   }
 
-  function removeOne(e){
-      const gettingPrice = e.path[2]
-      const price = gettingPrice.querySelector('p').innerHTML
-      const gettingInput = e.path[1]
-      const input = gettingInput.querySelector('input')
-      if(input.value == 0 || input.value === ''){return false}
-      input.value--
-      handleCart(price*-1)
-  }
-
-
-  let idStorage = 0
-  function handleCart (item){
-    const totalValue = document.getElementById('total')
-    localStorage.setItem(`subtotal${idStorage}`, item );
-    const storageTab = {...localStorage}
-    let superTotal = [];
-    delete storageTab['loglevel:webpack-dev-server']
-    for(const item in storageTab){
-      console.log(item)
-       superTotal.push(parseFloat(storageTab[item]))
-       console.log(superTotal)
-       let soma = superTotal.reduce((total, newValue)=> total + newValue, 0)
-        soma = Math.abs(soma)
-        console.log(soma)
-       totalValue.innerHTML = soma.toFixed(2).replace('.', ',')
-      }   
-    idStorage++
-  }
-
-
-  function renderHTML (listProducts, id){
+  function renderListOfProfuctsFound (listProducts, id){
     const select = document.getElementById('categoryList')
     if(select.childNodes.length < 4){
        getCategoryList(id)
     }
-    console.log(listProducts.length)
     const productsBox = document.getElementById('listOfProducts')
     productsBox.textContent =  ''
     if(listProducts.length == 0){
       renderNoResultsFound()
     }
     for(const item of listProducts){
-      console.log(item)
       const productsBox = document.getElementById('listOfProducts')
       const div = document.createElement('div')
       const prodTitle = document.createElement('h5')
@@ -260,9 +215,9 @@ function getCategoryList(identification){
       const numberOfItems = document.createElement('input')
       div.setAttribute('class', 'product__item')
       btnAdd.setAttribute('id', 'addItem')
-      btnAdd.onclick = addOne
+      btnAdd.onclick = addOneItemToCart
       numberOfItems.setAttribute('id', `numberOfItems`)
-      btnRemove.onclick = removeOne
+      btnRemove.onclick = removeOneItemFromCart
       btnRemove.setAttribute('id', 'removeItem')
       btnAdd.textContent = '+'
       btnRemove.textContent ='-'
@@ -280,37 +235,72 @@ function getCategoryList(identification){
     }
   }
 
+  function addOneItemToCart(e){
+    const gettingPrice = e.composedPath()[2]
+    const price = gettingPrice.querySelector('p').innerHTML
+    const gettingInput = e.composedPath()[1]
+    const input = gettingInput.querySelector('input')
+    input.value++
+    handleCart(price)
+  }
+
+  function removeOneItemFromCart(e){
+      const gettingPrice = e.composedPath()[2]
+      const price = gettingPrice.querySelector('p').innerHTML
+      const gettingInput = e.composedPath()[1]
+      const input = gettingInput.querySelector('input')
+      if(input.value == 0 || input.value === ''){return false}
+      input.value--
+      handleCart(price*-1)
+  }
+
+  let idStorage = 0
+  function handleCart (item){
+    const totalValue = document.getElementById('total')
+    localStorage.setItem(`subtotal${idStorage}`, item );
+    const storageTab = {...localStorage}
+    let superTotal = [];
+    delete storageTab['loglevel:webpack-dev-server']
+    for(const item in storageTab){
+       superTotal.push(parseFloat(storageTab[item]))
+       console.log(superTotal)
+       let soma = superTotal.reduce((total, newValue)=> total + newValue, 0)
+       soma = Math.abs(soma)
+       totalValue.innerHTML = soma.toFixed(2).replace('.', ',')
+      }   
+    idStorage++
+  }
+
 const select = document.getElementById('categoryList')
- select.addEventListener('change', function(e){
-   const selectedCategory = select.options[select.selectedIndex].value
-   const id = !select.options[select.selectedIndex].getAttribute('data-id') ? select.options[select.selectedIndex+1].getAttribute('data-id'):select.options[select.selectedIndex].getAttribute('data-id')
-   console.log(JSON.parse(id))
-   const search = ''
-   const categoryTitle = document.getElementById('categoryTitle')
-   categoryTitle.textContent = select.options[select.selectedIndex].textContent
-   getAllProducts(JSON.parse(id), selectedCategory,search)
- })
+select.addEventListener('change', selectCategory)
+
+ function selectCategory(){
+  const selectedCategory = select.options[select.selectedIndex].value
+  const id = !select.options[select.selectedIndex].getAttribute('data-id') ? select.options[select.selectedIndex+1].getAttribute('data-id'):select.options[select.selectedIndex].getAttribute('data-id')
+  const search = ''
+  const categoryTitle = document.getElementById('categoryTitle')
+  categoryTitle.textContent = select.options[select.selectedIndex].textContent
+  getAllProducts(JSON.parse(id), selectedCategory,search)
+ }
 
  const searchInput = document.getElementById('categorySearch')
- searchInput.addEventListener('blur', function(e){
-   const search = searchInput.value
-   const id = searchInput.getAttribute('data-id')
-   const categoryId = 0
-   const categoryTitle = document.getElementById('categoryTitle')
-   categoryTitle.textContent =  search
-   getAllProducts(JSON.parse(id), categoryId, search)
-   searchInput.value = ''
- })
+ searchInput.addEventListener('blur', searchForCategory)
+
+ function searchForCategory(){
+  const search = searchInput.value
+  const id = searchInput.getAttribute('data-id')
+  const categoryId = 0
+  const categoryTitle = document.getElementById('categoryTitle')
+  categoryTitle.textContent =  search
+  getAllProducts(JSON.parse(id), categoryId, search)
+  searchInput.value = ''
+ }
  
  function renderNoResultsFound(){
   const productsBox = document.getElementById('listOfProducts')
   const msg = document.createElement('h2')
   msg.textContent = 'Nenhum resultado encontrado'
   productsBox.appendChild(msg)
-}
-function loading(){
-  const productsBox = document.getElementById('listOfProducts')
-  productsBox.textContent='loading...'
 }
 
 const openModal = document.getElementById('openModal')
@@ -321,12 +311,10 @@ function displayModal(){
   modal.style.display = 'block'
 }
 
-
 const modalYesbtn =  document.getElementById('yes-btn')
+modalYesbtn.addEventListener('click', beginAnotherSearchByAddress)
 
-
-
-modalYesbtn.addEventListener('click', function(e){
+function beginAnotherSearchByAddress(){
   const modal = document.getElementById('modal')
   modal.style.display = 'none'
   const home = document.getElementById('home')
@@ -341,10 +329,11 @@ modalYesbtn.addEventListener('click', function(e){
   const addressBox = document.querySelector('.header__address')
   addressBox.style.display = 'none'
   localStorage.clear()
-})
+}
 
 const modalNobtn = document.getElementById('no-btn')
 modalNobtn.addEventListener('click', function(e){
   const modal = document.getElementById('modal')
   modal.style.display = 'none'
 })
+

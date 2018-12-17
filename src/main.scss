@@ -4,6 +4,7 @@
   margin: 0;
   font-family:'Poppins', sans-serif;
 }
+
 .header{
   background-color:black;
     &__nav{
@@ -46,10 +47,11 @@
         font-weight: bold;
       }
     }
-
+    
 }
 
 .main{
+  background: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -93,7 +95,7 @@
    }
   &__search{
     width: 32em;
-    margin-left: 12em;
+    margin-left: 10em;
     margin-bottom: 3em;
     object-fit: cover; 
     
@@ -148,9 +150,10 @@
 /*products page */
 
 #products{
+  background-color:white;
   display:none;
   padding: 1em 2em;
-  margin-bottom: 12em;
+  padding-bottom: 12em;
   select{
     border: 2px solid #ECECEC;
     border-radius: 2px;
@@ -233,11 +236,13 @@
   #addItem{
     background-color: rgb(252, 213, 0);
     border: 1px solid rgb(252, 213, 0);
+    cursor:pointer;
   }
   #removeItem{
     color:red;
     border: 1px solid red;
     background-color:white;
+    cursor:pointer;
   }
 } 
 
@@ -268,7 +273,7 @@
     background-color: black;
     color:white;
     padding:1em;
-    width: 12em;
+    width: 13em;
     border: 1px solid black;
     border-radius: .5em;
   }
@@ -278,6 +283,8 @@
   button{
     background-color: black;
     border: none;
+    color:white;
+    margin-left: .5em;
   }
  }
 }
@@ -294,7 +301,7 @@
   .modal__content{
     text-align: center;
     display: block;
-    margin: 3em auto;
+    margin: 1.5em auto;
     background-color: white;
     height: 30em;
     width: 30em;
@@ -316,4 +323,65 @@
     border-radius: 2px;
     margin: 0 3em;
   }
+}
+
+
+/*media query*/
+@media (max-width: 950px){
+  .header{
+    background-color:black;
+      &__nav{
+        padding: 1.5em 1em;
+      &-img{
+       display:none;
+      }
+      &-btn{
+        height: 3em;
+        width: 5em;
+        font-size: 11px;
+        }
+      }
+      &__address{
+        margin-left: 0em;
+      }
+     }
+  .main{
+    justify-content: center;
+    h1{
+      font-size: 36px;
+    }
+    &__search{
+      width: 20em;
+      margin-left: 0em;
+      margin-bottom: 2em;
+     &-input {
+      width: 20em;
+      height: 4em;
+     }
+     &-btn{
+      width: 15em;
+      font-size: 11px;
+     }
+    }
+    &__img{
+      display:none;
+    }
+  }
+  .footer{
+    padding: 1em 5em;
+  }
+  #products{
+    select{
+      display: block;
+      margin: 0 auto;
+    }
+     .products__input-search{
+      display:block;
+      margin: 1em auto;
+      width: 15em;
+      &-icon{
+        display:none;
+      }
+     }
+  } 
 }

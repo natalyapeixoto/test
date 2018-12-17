@@ -13,13 +13,13 @@
   <header class='header'>
     <nav class='header__nav'>
       <img class='header__nav-img' src="./src/img/white-logo-horizontal.png" alt="logo da zé delivery e bebidas">
-       <div id='openModal' class='header__address'>
-         <img src='./src/img/location-icon.png' alt='location-icon'>
-         <div class='header__address-user'>
-           <span class='header__address-user-title'>ENDEREÇO DE ENTREGA</span>
-           <span class='header__address-user-input'id='user-address'></span>
-         </div>
-       </div>
+      <div id='openModal' class='header__address'>
+        <img src='./src/img/location-icon.png' alt='location-icon'>
+        <div class='header__address-user'>
+          <span class='header__address-user-title'>ENDEREÇO DE ENTREGA</span>
+          <span class='header__address-user-input' id='user-address'></span>
+        </div>
+      </div>
       <button class='header__nav-btn'>ENTRAR</button>
     </nav>
   </header>
@@ -43,29 +43,30 @@
     <div class='modal__content'>
       <div class="modal__img">
         <img src='./src/img/modal-icon.png' alt='pin icon'>
-      </div
-      ><div class="body">
-         <p><strong>Tem certeza de que quer mudar o seu endereço?</strong></p><p class="note"><em>Ao mudar de endereço, você terá que refazer o seu pedido</em></p>
-        </div>
-        <div class="button-wrapper">
-          <button id='yes-btn' class='modal__btn'>Sim</button>
-          <button id='no-btn' class='modal__btn'>Não</div>
-        </div>
       </div>
+      <div class="body">
+        <p><strong>Tem certeza de que quer mudar o seu endereço?</strong></p>
+        <p><em>Ao mudar de endereço, você terá que refazer o seu pedido</em></p>
+      </div>
+      <div class="button-wrapper">
+        <button id='yes-btn' class='modal__btn'>Sim</button>
+        <button id='no-btn' class='modal__btn'>Não</button>
     </div>
-  <section id='products'>
+  </div>
+  </div>
 
+
+  <section id='products'>
     <select id='categoryList'>
       <option value='0' selected>Todos</option>
     </select>
-
-    <input id='categorySearch' class='products__input-search' type='text' placeholder="Buscar"><img class='products__input-search-icon' src='./src/img/search_icon.png'>
+    <input id='categorySearch' class='products__input-search' type='text' placeholder="Buscar"><img class='products__input-search-icon'
+      src='./src/img/search_icon.png'>
     <h3 id='categoryTitle' class='products__category-title'></h3>
-
     <div id='listOfProducts' class='products__list'>
     </div>
-
   </section>
+
   <footer class='footer' id='footerHome'>
     <ul>
       <li class='footer__list-title'>Zé Delivery</li>
