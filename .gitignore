@@ -1,14 +1,1 @@
 node_modules/
-
-#FuseBox cache 
-.fusebox/
-
-# SCSS
-*.css
-*.css.map
-*.sass.map
-*.scss.map
-
-
-#JS
-dist/bundle.js
